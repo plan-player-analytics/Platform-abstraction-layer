@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation project(':api')
+
+    compileOnly "net.md-5:bungeecord-api:$bungeecordVersion"
+}

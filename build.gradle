@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+group 'net.playeranalytics'
+version '4.0.0'
+
+allprojects {
+    group 'net.playeranalytics'
+    version '4.0.0'
+
+    compileJava { options.encoding = "UTF-8" }
+
+    ext.paperVersion = '1.16.5-R0.1-SNAPSHOT'
+    ext.spongeVersion = '7.3.0'
+    ext.nukkitVersion = '1.0-SNAPSHOT'
+    ext.bungeecordVersion = '1.16-R0.4'
+    ext.velocityVersion = '1.0.0-SNAPSHOT'
+
+    ext.jsonSimpleVersion = '1.1.1'
+    ext.guavaVersion = '30.1-jre'
+
+    repositories {
+        mavenCentral()
+        maven { // Spigot Repository
+            url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        }
+        maven { // Paper Repository
+            url = 'https://papermc.io/repo/repository/maven-public/'
+        }
+        maven { // Sponge Repository
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+        maven { // BungeeCord Repository
+            url = 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+        maven { // Velocity Repository
+            url = 'https://repo.velocitypowered.com/snapshots/'
+        }
+        maven { // Nukkit Repository
+            url = 'https://repo.nukkitx.com/main'
+        }
+        maven { // DepDownloader Repository
+            url = 'https://nexus.egg82.me/repository/maven-releases/'
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'failed', 'skipped'
+        exceptionFormat 'full'
+    }
+}
