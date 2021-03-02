@@ -1,9 +1,42 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id "com.jfrog.bintray"
 }
 
 dependencies {
     implementation project(':api')
 
     compileOnly "org.spongepowered:spongeapi:$spongeVersion"
+}
+
+ext.artifactName = 'platform-abstraction-layer-sponge'
+ext.artifactVersion = project.version
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    pkg {
+        repo = 'Plan-repository'
+        name = "$artifactName"
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/plan-player-analytics/Platform-abstraction-layer'
+        issueTrackerUrl = 'https://github.com/plan-player-analytics/Platform-abstraction-layer/issues'
+        version {
+            name = "$artifactVersion"
+            desc = "Platform abstraction layer $artifactVersion"
+        }
+        publications = ['bintrayPublication']
+    }
+}
+
+publishing {
+    publications {
+        bintrayPublication(MavenPublication) {
+            from components.java
+            groupId 'net.playeranalytics'
+            artifactId "$artifactName"
+            version "$artifactVersion"
+        }
+    }
 }

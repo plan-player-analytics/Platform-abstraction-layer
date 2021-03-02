@@ -22,8 +22,31 @@ implementations.
 
 ### Usage
 
-Include this library in your project and shade/shadow the library classes into the final artifact.
-Relocate `net.playeranalytics.plugin` to a different location.
+```groovy
+repositories {
+    maven { // Platform abstraction layer repository
+        url = "https://dl.bintray.com/rsl1122/Plan-repository"
+    }
+}
+
+ext.palVersion = "4.0.0"
+
+dependencies {
+    implementation "net.playeranalytics:platform-abstraction-layer-api:$palVersion"
+    
+    // Pick your platform(s)
+    implementation "net.playeranalytics:platform-abstraction-layer-bukkit:$palVersion"
+    implementation "net.playeranalytics:platform-abstraction-layer-bungeecord:$palVersion"
+    implementation "net.playeranalytics:platform-abstraction-layer-nukkit:$palVersion"
+    implementation "net.playeranalytics:platform-abstraction-layer-sponge:$palVersion"
+    implementation "net.playeranalytics:platform-abstraction-layer-velocity:$palVersion"
+}
+```
+
+Include this library in your project and shade/shadow the library classes into the final artifact.  
+Relocate `net.playeranalytics.plugin` to a different location to avoid conflicts.
+
+Access the API:
 
 ```java
 PlatformAbstractionLayer layer;
@@ -49,4 +72,3 @@ See the javadoc for further details on each feature `PlatformAbstractionLayer` p
 - Access to platform task scheduling
 - Managing listeners of specific platform
 - Downloading of dependencies into an extended classpath and execution within that context (Using DepDownloader library)
-  .

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.jfrog.bintray' apply false
 }
 group 'net.playeranalytics'
 version '4.0.0'
@@ -7,6 +8,8 @@ version '4.0.0'
 allprojects {
     group 'net.playeranalytics'
     version '4.0.0'
+
+    ext.version = project.version
 
     compileJava { options.encoding = "UTF-8" }
 

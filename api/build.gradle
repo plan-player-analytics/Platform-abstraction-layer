@@ -1,10 +1,51 @@
 plugins {
+    id "com.github.johnrengelman.shadow" version "6.1.0"
     id 'java'
+    id 'maven-publish'
+    id "com.jfrog.bintray"
 }
 
 dependencies {
     implementation "com.googlecode.json-simple:json-simple:$jsonSimpleVersion"
     implementation "com.google.guava:guava:$guavaVersion"
     compileOnly "org.slf4j:slf4j-api:1.7.30"
-    implementation "ninja.egg82:dep-downloader:2.2.16"
+    compile "ninja.egg82:dep-downloader:2.2.16"
+}
+
+ext.artifactName = 'platform-abstraction-layer-api'
+ext.artifactVersion = project.version
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    pkg {
+        repo = 'Plan-repository'
+        name = "$artifactName"
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/plan-player-analytics/Platform-abstraction-layer'
+        issueTrackerUrl = 'https://github.com/plan-player-analytics/Platform-abstraction-layer/issues'
+        version {
+            name = "$artifactVersion"
+            desc = "Platform abstraction layer $artifactVersion"
+            released = new Date()
+        }
+        publications = ['bintrayPublication']
+    }
+}
+
+publishing {
+    publications {
+        bintrayPublication(MavenPublication) {
+            publication -> project.shadow.component(publication)
+                groupId = 'net.playeranalytics'
+                artifactId = "$artifactName"
+                version = "$artifactVersion"
+        }
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.compile]
+
+    relocate 'ninja.egg82', 'net.playeranalytics.plugin.ninja.egg82'
 }
