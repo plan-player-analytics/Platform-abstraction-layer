@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id "com.jfrog.bintray"
 }
 
 dependencies {
@@ -13,26 +12,19 @@ dependencies {
 ext.artifactName = 'platform-abstraction-layer-bukkit'
 ext.artifactVersion = project.version
 
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    pkg {
-        repo = 'Plan-repository'
-        name = "$artifactName"
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/plan-player-analytics/Platform-abstraction-layer'
-        issueTrackerUrl = 'https://github.com/plan-player-analytics/Platform-abstraction-layer/issues'
-        version {
-            name = "$artifactVersion"
-            desc = "Platform abstraction layer $artifactVersion"
-        }
-        publications = ['bintrayPublication']
-    }
-}
-
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/plan-player-analytics/Platform-abstraction-layer")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
     publications {
-        bintrayPublication(MavenPublication) {
+        gpr(MavenPublication) {
             from components.java
             groupId 'net.playeranalytics'
             artifactId "$artifactName"

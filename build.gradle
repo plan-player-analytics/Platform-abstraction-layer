@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'com.jfrog.bintray' apply false
 }
 group 'net.playeranalytics'
 version '4.0.0'
