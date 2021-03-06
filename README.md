@@ -25,7 +25,7 @@ implementations.
 ```groovy
 repositories {
     maven { // Platform abstraction layer repository
-        url = "https://maven.pkg.github.com/plan-player-analytics/Platform-abstraction-layer"
+        url = "https://repo.playeranalytics.net/releases"
     }
 }
 
