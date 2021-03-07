@@ -6,8 +6,8 @@ import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.scheduling.VelocityRunnableFactory;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
-import net.playeranalytics.plugin.server.SLF4JPluginLogger;
 import net.playeranalytics.plugin.server.VelocityListeners;
+import net.playeranalytics.plugin.server.VelocityPluginLogger;
 import org.slf4j.Logger;
 
 import java.net.URLClassLoader;
@@ -35,7 +35,7 @@ public class VelocityPlatformLayer implements PlatformAbstractionLayer {
 
     @Override
     public PluginLogger getPluginLogger() {
-        if (pluginLogger == null) pluginLogger = new SLF4JPluginLogger(logger);
+        if (pluginLogger == null) pluginLogger = new VelocityPluginLogger(logger);
         return pluginLogger;
     }
 

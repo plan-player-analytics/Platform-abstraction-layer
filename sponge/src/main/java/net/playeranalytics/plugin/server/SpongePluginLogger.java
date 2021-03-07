@@ -2,11 +2,11 @@ package net.playeranalytics.plugin.server;
 
 import org.slf4j.Logger;
 
-public class SLF4JPluginLogger implements PluginLogger {
+public class SpongePluginLogger implements PluginLogger {
 
     private final Logger logger;
 
-    public SLF4JPluginLogger(Logger logger) {
+    public SpongePluginLogger(Logger logger) {
         this.logger = logger;
     }
 

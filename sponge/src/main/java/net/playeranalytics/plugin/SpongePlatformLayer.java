@@ -5,8 +5,8 @@ import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.scheduling.SpongeRunnableFactory;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
-import net.playeranalytics.plugin.server.SLF4JPluginLogger;
 import net.playeranalytics.plugin.server.SpongeListeners;
+import net.playeranalytics.plugin.server.SpongePluginLogger;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class SpongePlatformLayer implements PlatformAbstractionLayer {
 
     @Override
     public PluginLogger getPluginLogger() {
-        if (pluginLogger == null) pluginLogger = new SLF4JPluginLogger(logger);
+        if (pluginLogger == null) pluginLogger = new SpongePluginLogger(logger);
         return pluginLogger;
     }
 
