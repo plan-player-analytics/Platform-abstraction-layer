@@ -8,7 +8,7 @@ dependencies {
     implementation "com.googlecode.json-simple:json-simple:$jsonSimpleVersion"
     implementation "com.google.guava:guava:$guavaVersion"
     compileOnly "org.slf4j:slf4j-api:1.7.30"
-    compile "ninja.egg82:dep-downloader:2.2.16"
+    compile "com.github.egg82:DepDownloader:20373b7f6e"
 }
 
 ext.artifactName = 'platform-abstraction-layer-api'
@@ -37,6 +37,7 @@ publishing {
 }
 
 shadowJar {
+    archiveClassifier.set('')
     configurations = [project.configurations.compile]
 
     relocate 'ninja.egg82', 'net.playeranalytics.plugin.ninja.egg82'

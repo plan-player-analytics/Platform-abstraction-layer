@@ -3,6 +3,7 @@ package net.playeranalytics.plugin;
 import org.spongepowered.api.plugin.Plugin;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class SpongePluginInformation implements PluginInformation {
 
@@ -12,6 +13,11 @@ public class SpongePluginInformation implements PluginInformation {
     public SpongePluginInformation(Object plugin, File dataFolder) {
         this.plugin = plugin;
         this.dataFolder = dataFolder;
+    }
+
+    @Override
+    public InputStream getResourceFromJar(String byName) {
+        return getClass().getResourceAsStream("/" + byName);
     }
 
     @Override

@@ -21,11 +21,9 @@
  */
 package net.playeranalytics.plugin.player;
 
-import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,7 +48,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private final boolean rateLimiting;
 
     public UUIDFetcher(List<String> names, boolean rateLimiting) {
-        this.names = ImmutableList.copyOf(names);
+        this.names = names;
         this.rateLimiting = rateLimiting;
     }
 
@@ -76,7 +74,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         return connection;
     }
 
-    public static UUID getUUIDOf(String name) throws ParseException, InterruptedException, IOException {
+    public static UUID getUUIDOf(String name) {
         return new UUIDFetcher(Collections.singletonList(name)).call().get(name);
     }
 
@@ -102,27 +100,31 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     @Override
-    public Map<String, UUID> call() throws IOException, ParseException, InterruptedException {
-        Map<String, UUID> uuidMap = new HashMap<>();
+    public Map<String, UUID> call() {
+        try {
+            Map<String, UUID> uuidMap = new HashMap<>();
 
-        int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
+            int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
 
-        for (int i = 0; i < requests; i++) {
-            HttpURLConnection connection = createConnection();
-            String body = JSONArray.toJSONString(names.subList(i * 100, Math.min((i + 1) * 100, names.size())));
-            writeBody(connection, body);
-            JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-            for (Object profile : array) {
-                JSONObject jsonProfile = (JSONObject) profile;
-                String id = (String) jsonProfile.get("id");
-                String name = (String) jsonProfile.get("name");
-                UUID uuid = UUIDFetcher.getUUID(id);
-                uuidMap.put(name, uuid);
+            for (int i = 0; i < requests; i++) {
+                HttpURLConnection connection = createConnection();
+                String body = JSONArray.toJSONString(names.subList(i * 100, Math.min((i + 1) * 100, names.size())));
+                writeBody(connection, body);
+                JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+                for (Object profile : array) {
+                    JSONObject jsonProfile = (JSONObject) profile;
+                    String id = (String) jsonProfile.get("id");
+                    String name = (String) jsonProfile.get("name");
+                    UUID uuid = UUIDFetcher.getUUID(id);
+                    uuidMap.put(name, uuid);
+                }
+                if (rateLimiting && i != requests - 1) {
+                    Thread.sleep(100L);
+                }
             }
-            if (rateLimiting && i != requests - 1) {
-                Thread.sleep(100L);
-            }
+            return uuidMap;
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage(), e);
         }
-        return uuidMap;
     }
 }

@@ -2,11 +2,11 @@ plugins {
     id 'java'
 }
 group 'net.playeranalytics'
-version '4.0.0'
+version '4.0.1'
 
 allprojects {
     group 'net.playeranalytics'
-    version '4.0.0'
+    version '4.0.1'
 
     ext.version = project.version
 
@@ -41,8 +41,8 @@ allprojects {
         maven { // Nukkit Repository
             url = 'https://repo.nukkitx.com/main'
         }
-        maven { // DepDownloader Repository
-            url = 'https://nexus.egg82.me/repository/maven-releases/'
+        maven { // DepDownloader from Jitpack
+            url = 'https://jitpack.io/'
         }
     }
 }

@@ -3,6 +3,7 @@ package net.playeranalytics.plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class BukkitPluginInformation implements PluginInformation {
 
@@ -10,6 +11,11 @@ public class BukkitPluginInformation implements PluginInformation {
 
     public BukkitPluginInformation(JavaPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @Override
+    public InputStream getResourceFromJar(String byName) {
+        return plugin.getResource(byName);
     }
 
     @Override

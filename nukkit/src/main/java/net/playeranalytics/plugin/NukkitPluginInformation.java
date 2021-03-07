@@ -3,6 +3,7 @@ package net.playeranalytics.plugin;
 import cn.nukkit.plugin.PluginBase;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class NukkitPluginInformation implements PluginInformation {
 
@@ -10,6 +11,11 @@ public class NukkitPluginInformation implements PluginInformation {
 
     public NukkitPluginInformation(PluginBase plugin) {
         this.plugin = plugin;
+    }
+
+    @Override
+    public InputStream getResourceFromJar(String byName) {
+        return plugin.getResource(byName);
     }
 
     @Override
