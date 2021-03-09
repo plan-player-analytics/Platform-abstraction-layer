@@ -42,7 +42,7 @@ public class DependencyLoader {
                     .build();
             Stack<Artifact> dependencyLookup = new Stack<>();
             dependencyLookup.add(dependency);
-            while (dependencyLookup.peek() != null) {
+            while (!dependencyLookup.isEmpty() && dependencyLookup.peek() != null) {
                 Artifact current = dependencyLookup.pop();
                 dependencyLookup.addAll(current.getDependencies());
                 dependencies.add(current);
