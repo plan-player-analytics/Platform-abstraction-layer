@@ -15,6 +15,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -122,6 +123,7 @@ public class DependencyLoader {
     private void loadDependency(Artifact dependency) throws IOException {
         String artifactCoordinates = dependency.getGroupId() + "-" +
                 dependency.getArtifactId() + "-" + dependency.getVersion();
+        Files.createDirectories(libraryFolder.toPath());
         File artifactFile = libraryFolder.toPath().resolve(artifactCoordinates + ".jar"
         ).toFile();
 
