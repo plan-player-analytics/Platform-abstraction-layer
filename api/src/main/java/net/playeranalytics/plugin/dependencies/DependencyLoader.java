@@ -4,6 +4,7 @@ import net.playeranalytics.plugin.PluginInformation;
 import net.playeranalytics.plugin.server.PluginLogger;
 import ninja.egg82.maven.Artifact;
 import ninja.egg82.maven.Repository;
+import ninja.egg82.maven.Scope;
 import ninja.egg82.services.ProxiedURLClassLoader;
 import ninja.egg82.utils.InjectUtil;
 import org.xml.sax.SAXException;
@@ -45,8 +46,10 @@ public class DependencyLoader {
             dependencyLookup.add(dependency);
             while (!dependencyLookup.isEmpty() && dependencyLookup.peek() != null) {
                 Artifact current = dependencyLookup.pop();
-                dependencyLookup.addAll(current.getDependencies());
-                dependencies.add(current);
+                if (current.getScope() == Scope.COMPILE) {
+                    dependencyLookup.addAll(current.getDependencies());
+                    dependencies.add(current);
+                }
             }
         } catch (URISyntaxException | XPathExpressionException | SAXException e) {
             throw new IllegalArgumentException("Incorrect dependency definition", e);
