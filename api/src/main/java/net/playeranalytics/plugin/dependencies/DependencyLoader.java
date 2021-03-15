@@ -5,15 +5,12 @@ import net.playeranalytics.plugin.server.PluginLogger;
 import ninja.egg82.maven.Artifact;
 import ninja.egg82.maven.Repository;
 import ninja.egg82.maven.Scope;
-import ninja.egg82.services.ProxiedURLClassLoader;
-import ninja.egg82.utils.InjectUtil;
 import org.xml.sax.SAXException;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -22,7 +19,7 @@ import java.util.concurrent.*;
 
 public class DependencyLoader {
 
-    private final URLClassLoader classLoader;
+    private final DependencyClassLoader classLoader;
     private final PluginLogger pluginLogger;
 
     private final ExecutorService downloadPool = Executors.newWorkStealingPool(Math.max(4, Runtime.getRuntime().availableProcessors() / 2));
@@ -31,7 +28,7 @@ public class DependencyLoader {
     private final File libraryFolder;
 
     public DependencyLoader(URLClassLoader classLoader, PluginLogger pluginLogger, PluginInformation pluginInformation) {
-        this.classLoader = new ProxiedURLClassLoader(classLoader);
+        this.classLoader = new DependencyClassLoader(classLoader, "");
         this.pluginLogger = pluginLogger;
         dependencyCache = pluginInformation.getDataDirectory().resolve("dependency_cache").toFile();
         libraryFolder = pluginInformation.getDataDirectory().resolve("libraries").toFile();
@@ -39,7 +36,7 @@ public class DependencyLoader {
 
     public DependencyLoader addDependency(String repositoryAddress, String group, String artifact, String version) throws IOException {
         try {
-            Artifact dependency = Artifact.builder(group, artifact, version, dependencyCache)
+            Artifact dependency = Artifact.builder(group, artifact, version, dependencyCache, Scope.COMPILE)
                     .addRepository(Repository.builder(repositoryAddress).build())
                     .build();
             Stack<Artifact> dependencyLookup = new Stack<>();
@@ -135,15 +132,11 @@ public class DependencyLoader {
             download(dependency, artifactCoordinates, artifactFile);
         }
 
-        inject(artifactCoordinates, artifactFile);
+        inject(artifactFile);
     }
 
-    private void inject(String artifactCoordinates, File artifactFile) throws IOException {
-        try {
-            InjectUtil.injectFile(artifactFile, classLoader);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IOException("Failed to load library " + artifactCoordinates + ", " + e.getMessage(), e);
-        }
+    private void inject(File artifactFile) throws IOException {
+        classLoader.addURL(artifactFile.toPath().toUri().toURL());
     }
 
     private void download(Artifact dependency, String artifactCoordinates, File artifactFile) throws IOException {
