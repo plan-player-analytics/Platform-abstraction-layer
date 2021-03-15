@@ -4,7 +4,7 @@ Platform abstraction layer is a library for abstracting away some server platfor
 
 Compared to the [the previous abstraction library](https://github.com/AuroraLS3/Abstract-Plugin-Framework), this library
 is more modular and main goal was to use composition rather than inheritance to gain access to the platform
-implementations.
+implementations. This allows users of this API to use other libraries without worrying about compatibility issues.
 
 ### Supported Minecraft server-platforms
 
