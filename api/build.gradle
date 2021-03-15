@@ -9,6 +9,7 @@ dependencies {
     implementation "com.google.guava:guava:$guavaVersion"
     compileOnly "org.slf4j:slf4j-api:1.7.30"
     compile "com.github.egg82:DepDownloader:20373b7f6e"
+    compile "me.lucko:jar-relocator:1.4"
 }
 
 ext.artifactName = 'platform-abstraction-layer-api'
@@ -41,4 +42,5 @@ shadowJar {
     configurations = [project.configurations.compile]
 
     relocate 'ninja.egg82', 'net.playeranalytics.plugin.ninja.egg82'
+    relocate 'me.lucko', 'net.playeranalytics.plugin.me.lucko'
 }

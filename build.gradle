@@ -2,11 +2,11 @@ plugins {
     id 'java'
 }
 group 'net.playeranalytics'
-version '4.0.6'
+version '4.0.9'
 
 allprojects {
     group 'net.playeranalytics'
-    version '4.0.6'
+    version '4.0.9'
 
     ext.version = project.version
 

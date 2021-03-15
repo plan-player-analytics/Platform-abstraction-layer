@@ -1,16 +1,20 @@
 package net.playeranalytics.plugin.dependencies;
 
+import me.lucko.jarrelocator.JarRelocator;
+import me.lucko.jarrelocator.Relocation;
 import net.playeranalytics.plugin.PluginInformation;
 import net.playeranalytics.plugin.server.PluginLogger;
 import ninja.egg82.maven.Artifact;
 import ninja.egg82.maven.Repository;
 import ninja.egg82.maven.Scope;
+import ninja.egg82.utils.InjectUtil;
 import org.xml.sax.SAXException;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -19,32 +23,39 @@ import java.util.concurrent.*;
 
 public class DependencyLoader {
 
-    private final DependencyClassLoader classLoader;
+    private final URLClassLoader classLoader;
     private final PluginLogger pluginLogger;
 
     private final ExecutorService downloadPool = Executors.newWorkStealingPool(Math.max(4, Runtime.getRuntime().availableProcessors() / 2));
-    private final Set<Artifact> dependencies = new HashSet<>();
+    private final Set<DependencyAndRelocations> dependencies = new HashSet<>();
     private final File dependencyCache;
     private final File libraryFolder;
 
     public DependencyLoader(URLClassLoader classLoader, PluginLogger pluginLogger, PluginInformation pluginInformation) {
-        this.classLoader = new DependencyClassLoader(classLoader, "");
+        this.classLoader = classLoader;
         this.pluginLogger = pluginLogger;
         dependencyCache = pluginInformation.getDataDirectory().resolve("dependency_cache").toFile();
         libraryFolder = pluginInformation.getDataDirectory().resolve("libraries").toFile();
     }
 
-    public DependencyLoader addDependency(String repositoryAddress, String group, String artifact, String version) throws IOException {
+    public DependencyLoader addDependency(
+            String repositoryAddress, String group, String artifact, String version,
+            List<Relocation> relocations
+    ) throws IOException {
         try {
             Artifact dependency = Artifact.builder(group, artifact, version, dependencyCache, Scope.COMPILE)
                     .addRepository(Repository.builder(repositoryAddress).build())
                     .build();
-            Stack<Artifact> dependencyLookup = new Stack<>();
-            dependencyLookup.add(dependency);
+            Stack<DependencyAndRelocations> dependencyLookup = new Stack<>();
+            dependencyLookup.add(new DependencyAndRelocations(dependency, relocations));
             while (!dependencyLookup.isEmpty() && dependencyLookup.peek() != null) {
-                Artifact current = dependencyLookup.pop();
-                if (current.getScope() == Scope.COMPILE) {
-                    dependencyLookup.addAll(current.getDependencies());
+                DependencyAndRelocations current = dependencyLookup.pop();
+                Artifact currentArtifact = current.getArtifact();
+                if (currentArtifact.getScope() == Scope.COMPILE) {
+                    currentArtifact.getDependencies().stream()
+                            .map(dependencyArtifact ->
+                                    new DependencyAndRelocations(dependencyArtifact, relocations))
+                            .forEach(dependencyLookup::add);
                     dependencies.add(current);
                 }
             }
@@ -64,7 +75,8 @@ public class DependencyLoader {
         }
     }
 
-    public void executeWithDependencyClassloaderContext(Runnable runnable) {
+    @Deprecated
+    public <T extends Runnable> void executeWithDependencyClassloaderContext(T runnable) {
         ClassLoader origClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(classLoader);
@@ -77,7 +89,7 @@ public class DependencyLoader {
     private void loadDependencies() throws IOException {
         List<CompletableFuture<?>> loading = new ArrayList<>();
         List<Throwable> downloadErrors = new CopyOnWriteArrayList<>();
-        for (Artifact dependency : dependencies) {
+        for (DependencyAndRelocations dependency : dependencies) {
             loading.add(scheduleLoading(downloadErrors, dependency));
         }
         CompletableFuture.allOf(loading.toArray(new CompletableFuture[0])).join();
@@ -88,7 +100,7 @@ public class DependencyLoader {
         }
     }
 
-    private CompletableFuture<Void> scheduleLoading(List<Throwable> downloadErrors, Artifact dependency) {
+    private CompletableFuture<Void> scheduleLoading(List<Throwable> downloadErrors, DependencyAndRelocations dependency) {
         return CompletableFuture.runAsync(() -> {
             try {
                 loadDependency(dependency);
@@ -120,23 +132,40 @@ public class DependencyLoader {
         throw firstError;
     }
 
-    private void loadDependency(Artifact dependency) throws IOException {
+    private void loadDependency(DependencyAndRelocations toLoad) throws IOException {
+        Artifact dependency = toLoad.getArtifact();
         String artifactCoordinates = dependency.getGroupId() + "-" +
                 dependency.getArtifactId() + "-" + dependency.getVersion();
         Files.createDirectories(libraryFolder.toPath());
-        File artifactFile = libraryFolder.toPath().resolve(artifactCoordinates + ".jar"
-        ).toFile();
+        File artifactFile = libraryFolder.toPath().resolve(artifactCoordinates + ".jar").toFile();
+        File relocatedArtifactFile = libraryFolder.toPath().resolve(artifactCoordinates + "-relocated.jar").toFile();
 
-        if (!dependency.fileExists(artifactFile)) {
-            pluginLogger.info("Downloading library: " + dependency.getArtifactId() + "..");
-            download(dependency, artifactCoordinates, artifactFile);
+        if (!relocatedArtifactFile.exists() && !toLoad.getRelocations().isEmpty()) {
+            if (!dependency.fileExists(artifactFile)) {
+                pluginLogger.info("Downloading library: " + dependency.getArtifactId() + "..");
+                download(dependency, artifactCoordinates, artifactFile);
+            }
+            new JarRelocator(artifactFile, relocatedArtifactFile, toLoad.getRelocations()).run();
+
+            inject(relocatedArtifactFile);
+        } else if (relocatedArtifactFile.exists()) {
+            inject(relocatedArtifactFile);
+        } else {
+            if (!dependency.fileExists(artifactFile)) {
+                pluginLogger.info("Downloading library: " + dependency.getArtifactId() + "..");
+                download(dependency, artifactCoordinates, artifactFile);
+            }
+
+            inject(artifactFile);
         }
-
-        inject(artifactFile);
     }
 
     private void inject(File artifactFile) throws IOException {
-        classLoader.addURL(artifactFile.toPath().toUri().toURL());
+        try {
+            InjectUtil.injectFile(artifactFile, classLoader);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new IOException("Failed to download " + artifactFile + ", " + e.getMessage(), e);
+        }
     }
 
     private void download(Artifact dependency, String artifactCoordinates, File artifactFile) throws IOException {
