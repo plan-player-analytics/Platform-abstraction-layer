@@ -43,4 +43,8 @@ shadowJar {
 
     relocate 'ninja.egg82', 'net.playeranalytics.plugin.ninja.egg82'
     relocate 'me.lucko', 'net.playeranalytics.plugin.me.lucko'
+    relocate 'org.objectweb', 'net.playeranalytics.plugin.org.objectweb'
+
+    exclude '**/module-info.class'
+    exclude 'module-info.class'
 }
