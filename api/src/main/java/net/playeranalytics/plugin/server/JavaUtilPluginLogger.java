@@ -20,7 +20,7 @@ public class JavaUtilPluginLogger implements PluginLogger {
 
     @Override
     public PluginLogger info(String message) {
-        if (message.charAt(0) == '\u00a7') { // §
+        if (!message.isEmpty() && message.charAt(0) == '\u00a7') { // §
             coloredInfoLogger.accept(message);
         } else {
             logger.info(message);
