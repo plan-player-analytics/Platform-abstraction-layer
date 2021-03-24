@@ -1,19 +1,30 @@
 package net.playeranalytics.plugin.server;
 
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JavaUtilPluginLogger implements PluginLogger {
 
     private final Logger logger;
+    private final Consumer<String> coloredInfoLogger;
 
     public JavaUtilPluginLogger(Logger logger) {
+        this(logger, logger::info);
+    }
+
+    public JavaUtilPluginLogger(Logger logger, Consumer<String> coloredInfoLogger) {
         this.logger = logger;
+        this.coloredInfoLogger = coloredInfoLogger;
     }
 
     @Override
     public PluginLogger info(String message) {
-        logger.info(message);
+        if (message.charAt(0) == '\u00a7') { // §
+            coloredInfoLogger.accept(message);
+        } else {
+            logger.info(message);
+        }
         return this;
     }
 

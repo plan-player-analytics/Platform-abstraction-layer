@@ -1,5 +1,6 @@
 package net.playeranalytics.plugin;
 
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.BungeeRunnableFactory;
@@ -27,7 +28,13 @@ public class BungeePlatformLayer implements PlatformAbstractionLayer {
 
     @Override
     public PluginLogger getPluginLogger() {
-        if (pluginLogger == null) pluginLogger = new JavaUtilPluginLogger(plugin.getLogger());
+        if (pluginLogger == null) {
+            pluginLogger = new JavaUtilPluginLogger(
+                    plugin.getLogger(),
+                    coloredMessage -> plugin.getProxy().getConsole()
+                            .sendMessage(new ComponentBuilder().appendLegacy(coloredMessage).create())
+            );
+        }
         return pluginLogger;
     }
 
