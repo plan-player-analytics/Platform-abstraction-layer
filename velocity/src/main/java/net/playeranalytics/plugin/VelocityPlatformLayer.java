@@ -64,7 +64,6 @@ public class VelocityPlatformLayer implements PlatformAbstractionLayer {
         if (dependencyLoader == null) {
             dependencyLoader = new DependencyLoader(
                     (URLClassLoader) getClass().getClassLoader(),
-                    getPluginLogger(),
                     getPluginInformation()
             );
         }

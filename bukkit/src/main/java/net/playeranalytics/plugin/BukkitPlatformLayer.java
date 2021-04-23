@@ -59,7 +59,6 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
         if (dependencyLoader == null) {
             dependencyLoader = new DependencyLoader(
                     (URLClassLoader) getClass().getClassLoader(),
-                    getPluginLogger(),
                     getPluginInformation()
             );
         }

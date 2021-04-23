@@ -8,7 +8,7 @@ dependencies {
     implementation "com.googlecode.json-simple:json-simple:$jsonSimpleVersion"
     implementation "com.google.guava:guava:$guavaVersion"
     compileOnly "org.slf4j:slf4j-api:1.7.30"
-    compile "com.github.egg82:DepDownloader:20373b7f6e"
+    compile "com.github.egg82:MVNLoader:276fc2165f"
     compile "me.lucko:jar-relocator:1.4"
 }
 

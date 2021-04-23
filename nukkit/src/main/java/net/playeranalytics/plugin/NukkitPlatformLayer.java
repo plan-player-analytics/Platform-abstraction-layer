@@ -54,7 +54,6 @@ public class NukkitPlatformLayer implements PlatformAbstractionLayer {
         if (dependencyLoader == null) {
             dependencyLoader = new DependencyLoader(
                     (URLClassLoader) getClass().getClassLoader(),
-                    getPluginLogger(),
                     getPluginInformation()
             );
         }
