@@ -1,15 +1,12 @@
 package net.playeranalytics.plugin;
 
 import cn.nukkit.plugin.PluginBase;
-import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.NukkitRunnableFactory;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.NukkitListeners;
 import net.playeranalytics.plugin.server.NukkitPluginLogger;
 import net.playeranalytics.plugin.server.PluginLogger;
-
-import java.net.URLClassLoader;
 
 public class NukkitPlatformLayer implements PlatformAbstractionLayer {
 
@@ -19,7 +16,6 @@ public class NukkitPlatformLayer implements PlatformAbstractionLayer {
     private Listeners listeners;
     private RunnableFactory runnableFactory;
     private PluginInformation pluginInformation;
-    private DependencyLoader dependencyLoader;
 
     public NukkitPlatformLayer(PluginBase plugin) {
         this.plugin = plugin;
@@ -49,14 +45,4 @@ public class NukkitPlatformLayer implements PlatformAbstractionLayer {
         return pluginInformation;
     }
 
-    @Override
-    public DependencyLoader getDependencyLoader() {
-        if (dependencyLoader == null) {
-            dependencyLoader = new DependencyLoader(
-                    (URLClassLoader) getClass().getClassLoader(),
-                    getPluginInformation()
-            );
-        }
-        return dependencyLoader;
-    }
 }

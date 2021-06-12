@@ -2,11 +2,11 @@ plugins {
     id 'java'
 }
 group 'net.playeranalytics'
-version '4.1.0'
+version '5.0.0'
 
 allprojects {
     group 'net.playeranalytics'
-    version '4.1.0'
+    version '5.0.0'
 
     ext.version = project.version
 
@@ -22,6 +22,7 @@ allprojects {
     ext.guavaVersion = '30.1-jre'
 
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { // Spigot Repository
             url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
@@ -40,9 +41,6 @@ allprojects {
         }
         maven { // Nukkit Repository
             url = 'https://repo.nukkitx.com/main'
-        }
-        maven { // DepDownloader from Jitpack
-            url = 'https://jitpack.io/'
         }
     }
 }

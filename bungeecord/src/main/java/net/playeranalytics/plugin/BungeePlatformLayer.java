@@ -2,15 +2,12 @@ package net.playeranalytics.plugin;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.BungeeRunnableFactory;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.server.BungeeListeners;
 import net.playeranalytics.plugin.server.JavaUtilPluginLogger;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
-
-import java.net.URLClassLoader;
 
 public class BungeePlatformLayer implements PlatformAbstractionLayer {
 
@@ -20,7 +17,6 @@ public class BungeePlatformLayer implements PlatformAbstractionLayer {
     private Listeners listeners;
     private RunnableFactory runnableFactory;
     private PluginInformation pluginInformation;
-    private DependencyLoader dependencyLoader;
 
     public BungeePlatformLayer(Plugin plugin) {
         this.plugin = plugin;
@@ -56,14 +52,4 @@ public class BungeePlatformLayer implements PlatformAbstractionLayer {
         return pluginInformation;
     }
 
-    @Override
-    public DependencyLoader getDependencyLoader() {
-        if (dependencyLoader == null) {
-            dependencyLoader = new DependencyLoader(
-                    (URLClassLoader) getClass().getClassLoader(),
-                    getPluginInformation()
-            );
-        }
-        return dependencyLoader;
-    }
 }

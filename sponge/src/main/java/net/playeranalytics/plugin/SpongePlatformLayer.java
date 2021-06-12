@@ -1,6 +1,5 @@
 package net.playeranalytics.plugin;
 
-import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.scheduling.SpongeRunnableFactory;
 import net.playeranalytics.plugin.server.Listeners;
@@ -10,7 +9,6 @@ import net.playeranalytics.plugin.server.SpongePluginLogger;
 import org.slf4j.Logger;
 
 import java.io.File;
-import java.net.URLClassLoader;
 
 public class SpongePlatformLayer implements PlatformAbstractionLayer {
 
@@ -22,7 +20,6 @@ public class SpongePlatformLayer implements PlatformAbstractionLayer {
     private Listeners listeners;
     private RunnableFactory runnableFactory;
     private PluginInformation pluginInformation;
-    private DependencyLoader dependencyLoader;
 
     public SpongePlatformLayer(Object plugin, File dataFolder, Logger logger) {
         this.plugin = plugin;
@@ -54,14 +51,4 @@ public class SpongePlatformLayer implements PlatformAbstractionLayer {
         return pluginInformation;
     }
 
-    @Override
-    public DependencyLoader getDependencyLoader() {
-        if (dependencyLoader == null) {
-            dependencyLoader = new DependencyLoader(
-                    (URLClassLoader) getClass().getClassLoader(),
-                    getPluginInformation()
-            );
-        }
-        return dependencyLoader;
-    }
 }
