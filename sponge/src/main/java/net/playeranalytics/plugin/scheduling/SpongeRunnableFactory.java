@@ -23,5 +23,6 @@ public class SpongeRunnableFactory implements RunnableFactory {
     @Override
     public void cancelAllKnownTasks() {
         Sponge.asyncScheduler().tasks(plugin).forEach(ScheduledTask::cancel);
+        Sponge.server().scheduler().tasks(plugin).forEach(ScheduledTask::cancel);
     }
 }
