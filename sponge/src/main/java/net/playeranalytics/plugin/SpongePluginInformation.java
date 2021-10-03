@@ -47,16 +47,18 @@ public class SpongePluginInformation implements PluginInformation {
                 .map(Object::toString)
                 .collect(Collectors.joining("."));
 
-        StringBuilder stringBuilder = new StringBuilder(main);
+        StringBuilder stringBuilder = new StringBuilder(main.equals("0") ? "" : main);
 
         int build = artifactVersion.getBuildNumber();
         if (build != 0) {
-            stringBuilder.append('-').append(build);
+            if (stringBuilder.length() > 0) stringBuilder.append('-');
+            stringBuilder.append(build);
         }
 
         String qualifier = artifactVersion.getQualifier();
         if (qualifier != null) {
-            stringBuilder.append('-').append(qualifier);
+            if (stringBuilder.length() > 0) stringBuilder.append('-');
+            stringBuilder.append(qualifier);
         }
 
         return stringBuilder.toString();
