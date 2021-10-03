@@ -1,13 +1,14 @@
 package net.playeranalytics.plugin.scheduling;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.scheduler.ScheduledTask;
+import org.spongepowered.plugin.PluginContainer;
 
 public class SpongeRunnableFactory implements RunnableFactory {
 
-    private final Object plugin;
+    private final PluginContainer plugin;
 
-    public SpongeRunnableFactory(Object plugin) {this.plugin = plugin;}
+    public SpongeRunnableFactory(PluginContainer plugin) {this.plugin = plugin;}
 
     @Override
     public UnscheduledTask create(Runnable runnable) {
@@ -21,6 +22,6 @@ public class SpongeRunnableFactory implements RunnableFactory {
 
     @Override
     public void cancelAllKnownTasks() {
-        Sponge.getScheduler().getScheduledTasks(plugin).forEach(Task::cancel);
+        Sponge.asyncScheduler().tasks(plugin).forEach(ScheduledTask::cancel);
     }
 }

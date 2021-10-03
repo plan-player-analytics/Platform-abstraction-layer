@@ -1,6 +1,6 @@
 package net.playeranalytics.plugin.server;
 
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 public class SpongePluginLogger implements PluginLogger {
 
