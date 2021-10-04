@@ -6,30 +6,29 @@ import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
 import net.playeranalytics.plugin.server.SpongeListeners;
 import net.playeranalytics.plugin.server.SpongePluginLogger;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.plugin.PluginContainer;
 
 import java.io.File;
 
 public class SpongePlatformLayer implements PlatformAbstractionLayer {
 
-    private final Object plugin;
+    private final PluginContainer plugin;
     private final File dataFolder;
-    private final Logger logger;
 
     private PluginLogger pluginLogger;
     private Listeners listeners;
     private RunnableFactory runnableFactory;
     private PluginInformation pluginInformation;
 
-    public SpongePlatformLayer(Object plugin, File dataFolder, Logger logger) {
+    public SpongePlatformLayer(PluginContainer plugin, File dataFolder) {
         this.plugin = plugin;
         this.dataFolder = dataFolder;
-        this.logger = logger;
     }
 
     @Override
     public PluginLogger getPluginLogger() {
-        if (pluginLogger == null) pluginLogger = new SpongePluginLogger(logger);
+        if (pluginLogger == null) pluginLogger = new SpongePluginLogger(plugin.logger());
         return pluginLogger;
     }
 

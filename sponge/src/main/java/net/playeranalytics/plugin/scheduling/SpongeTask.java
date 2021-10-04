@@ -1,14 +1,20 @@
 package net.playeranalytics.plugin.scheduling;
 
+import org.spongepowered.api.scheduler.ScheduledTask;
+
 public class SpongeTask implements Task {
 
-    private final org.spongepowered.api.scheduler.Task task;
+    private final ScheduledTask task;
+    private final boolean gameThread;
 
-    public SpongeTask(org.spongepowered.api.scheduler.Task task) {this.task = task;}
+    public SpongeTask(ScheduledTask task, boolean gameThread) {
+        this.task = task;
+        this.gameThread = gameThread;
+    }
 
     @Override
     public boolean isGameThread() {
-        return !task.isAsynchronous();
+        return gameThread;
     }
 
     @Override
