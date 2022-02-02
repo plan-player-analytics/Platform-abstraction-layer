@@ -29,7 +29,7 @@ repositories {
     }
 }
 
-ext.palVersion = "4.0.0"
+ext.palVersion = "5.0.0"
 
 dependencies {
     implementation "net.playeranalytics:platform-abstraction-layer-api:$palVersion"
@@ -71,4 +71,3 @@ See the javadoc for further details on each feature `PlatformAbstractionLayer` p
 - Access to plugin meta-data, jar-resources and configuration folder
 - Access to platform task scheduling
 - Managing listeners of specific platform
-- Downloading of dependencies into an extended classpath and execution within that context (Using DepDownloader library)
