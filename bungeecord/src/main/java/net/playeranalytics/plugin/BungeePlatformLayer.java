@@ -25,10 +25,11 @@ public class BungeePlatformLayer implements PlatformAbstractionLayer {
     @Override
     public PluginLogger getPluginLogger() {
         if (pluginLogger == null) {
+            String pluginName = plugin.getDescription().getName();
             pluginLogger = new JavaUtilPluginLogger(
                     plugin.getLogger(),
                     coloredMessage -> plugin.getProxy().getConsole()
-                            .sendMessage(new ComponentBuilder().appendLegacy(coloredMessage).create())
+                            .sendMessage(new ComponentBuilder().append("[" + pluginName + "] ").appendLegacy(coloredMessage).create())
             );
         }
         return pluginLogger;

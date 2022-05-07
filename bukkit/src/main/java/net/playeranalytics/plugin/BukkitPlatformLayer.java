@@ -24,9 +24,10 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
     @Override
     public PluginLogger getPluginLogger() {
         if (pluginLogger == null) {
+            String pluginName = plugin.getDescription().getName();
             pluginLogger = new JavaUtilPluginLogger(
                     plugin.getLogger(),
-                    coloredMessage -> plugin.getServer().getConsoleSender().sendMessage(coloredMessage)
+                    coloredMessage -> plugin.getServer().getConsoleSender().sendMessage("[" + pluginName + "] " + coloredMessage)
             );
         }
         return pluginLogger;
