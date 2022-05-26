@@ -9,6 +9,12 @@ public abstract class PluginRunnable implements Runnable {
     }
 
     public void cancel() {
-        if (toCancel != null) toCancel.cancel();
+        if (toCancel != null) {
+            try {
+                toCancel.cancel();
+            } catch (Exception ignored) {
+                // Ignore cancel exceptions, they usually mean that task was already cancelled.
+            }
+        }
     }
 }
