@@ -1,16 +1,20 @@
 package net.playeranalytics.plugin;
 
-import org.spongepowered.api.plugin.Plugin;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.spongepowered.plugin.PluginContainer;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SpongePluginInformation implements PluginInformation {
 
-    private final Object plugin;
+    private final PluginContainer plugin;
     private final File dataFolder;
 
-    public SpongePluginInformation(Object plugin, File dataFolder) {
+    public SpongePluginInformation(PluginContainer plugin, File dataFolder) {
         this.plugin = plugin;
         this.dataFolder = dataFolder;
     }
@@ -27,6 +31,36 @@ public class SpongePluginInformation implements PluginInformation {
 
     @Override
     public String getVersion() {
-        return plugin.getClass().getAnnotation(Plugin.class).version();
+        // Implementation to convert a ArtifactVersion to String, regardless of implementation
+        ArtifactVersion artifactVersion = plugin.metadata().version();
+
+        int major = artifactVersion.getMajorVersion();
+        int minor = artifactVersion.getMinorVersion();
+        int incremental = artifactVersion.getIncrementalVersion();
+
+        String main = Stream.of(
+                        major == 0 ? null : major,
+                        minor,
+                        incremental == 0 ? null : incremental
+                )
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .collect(Collectors.joining("."));
+
+        StringBuilder stringBuilder = new StringBuilder(main.equals("0") ? "" : main);
+
+        int build = artifactVersion.getBuildNumber();
+        if (build != 0) {
+            if (stringBuilder.length() > 0) stringBuilder.append('-');
+            stringBuilder.append(build);
+        }
+
+        String qualifier = artifactVersion.getQualifier();
+        if (qualifier != null) {
+            if (stringBuilder.length() > 0) stringBuilder.append('-');
+            stringBuilder.append(qualifier);
+        }
+
+        return stringBuilder.toString();
     }
 }

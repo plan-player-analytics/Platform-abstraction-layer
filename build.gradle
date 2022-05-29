@@ -13,7 +13,7 @@ allprojects {
     compileJava { options.encoding = "UTF-8" }
 
     ext.paperVersion = '1.16.4-R0.1-SNAPSHOT'
-    ext.spongeVersion = '7.3.0'
+    ext.spongeVersion = '8.0.0-SNAPSHOT'
     ext.nukkitVersion = '1.0-SNAPSHOT'
     ext.bungeecordVersion = '1.16-R0.4'
     ext.velocityVersion = '1.0.0-SNAPSHOT'
