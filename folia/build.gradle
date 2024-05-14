@@ -9,8 +9,10 @@ dependencies {
     compileOnly "io.papermc.paper:paper-api:$foliaVersion"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
 
 ext.artifactName = 'platform-abstraction-layer-folia'
 ext.artifactVersion = project.version

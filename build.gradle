@@ -2,15 +2,20 @@ plugins {
     id 'java'
 }
 group 'net.playeranalytics'
-version '5.1.0'
+version '5.1.8'
 
 allprojects {
     group 'net.playeranalytics'
-    version '5.1.2'
+    version '5.1.8'
 
     ext.version = project.version
 
     compileJava { options.encoding = "UTF-8" }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = '11'
+        targetCompatibility = '11'
+    }
 
     ext.paperVersion = '1.16.4-R0.1-SNAPSHOT'
     ext.spongeVersion = '8.0.0-SNAPSHOT'

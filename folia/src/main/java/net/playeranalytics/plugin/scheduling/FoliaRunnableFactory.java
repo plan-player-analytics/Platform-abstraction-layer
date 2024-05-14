@@ -22,6 +22,7 @@ public class FoliaRunnableFactory implements RunnableFactory {
 
     @Override
     public void cancelAllKnownTasks() {
-        plugin.getServer().getScheduler().cancelTasks(plugin);
+        plugin.getServer().getAsyncScheduler().cancelTasks(plugin);
+        plugin.getServer().getGlobalRegionScheduler().cancelTasks(plugin);
     }
 }
