@@ -6,7 +6,7 @@ version '5.1.0'
 
 allprojects {
     group 'net.playeranalytics'
-    version '5.1.0'
+    version '5.1.1'
 
     ext.version = project.version
 
@@ -40,7 +40,7 @@ allprojects {
             url = 'https://repo.velocitypowered.com/snapshots/'
         }
         maven { // Nukkit Repository
-            url = 'https://repo.nukkitx.com/main'
+            url = 'https://repo.opencollab.dev/maven-snapshots'
         }
     }
 }
