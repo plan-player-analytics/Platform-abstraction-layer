@@ -1,6 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.1"
-    id 'java'
+    id 'java-library'
     id 'maven-publish'
 }
 
@@ -37,7 +37,6 @@ publishing {
 
 shadowJar {
     archiveClassifier.set('')
-    configurations = [project.configurations.implementation]
 
     exclude '**/module-info.class'
     exclude 'module-info.class'
