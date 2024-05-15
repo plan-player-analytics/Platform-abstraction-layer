@@ -19,7 +19,7 @@ public class FoliaPlatformLayer implements PlatformAbstractionLayer {
 
     public FoliaPlatformLayer(JavaPlugin plugin) {
         if (!isFolia()) {
-            throw new IllegalStateException("This plugin is not compatible with Folia!");
+            throw new IllegalStateException("Tried to enable Folia plugin on non-Folia server!");
         }
         this.plugin = plugin;
     }
