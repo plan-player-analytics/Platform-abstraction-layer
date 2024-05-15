@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+dependencies {
+    implementation project(':api')
+
+    compileOnly "io.papermc.paper:paper-api:$foliaVersion"
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
+ext.artifactName = 'platform-abstraction-layer-folia'
+ext.artifactVersion = project.version
+
+publishing {
+    repositories {
+        maven {
+            name = "plan-repo"
+            url = uri("https://repo.playeranalytics.net/releases")
+            credentials {
+                username = "user"
+                password = System.getenv("REPOSILITE_TOKEN")
+            }
+        }
+    }
+    publications {
+        deployment(MavenPublication) {
+            from components.java
+            groupId 'net.playeranalytics'
+            artifactId "$artifactName"
+            version "$artifactVersion"
+        }
+    }
+}
