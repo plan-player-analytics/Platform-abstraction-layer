@@ -3,6 +3,14 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { // Paper Repository
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+}
+
 dependencies {
     implementation project(':api')
 

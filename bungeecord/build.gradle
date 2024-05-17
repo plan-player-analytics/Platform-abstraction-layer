@@ -3,6 +3,14 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { // BungeeCord Repository
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
 dependencies {
     implementation project(':api')
 

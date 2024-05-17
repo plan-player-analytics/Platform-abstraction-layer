@@ -3,6 +3,10 @@ plugins {
     id 'java-library'
     id 'maven-publish'
 }
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
 
 dependencies {
     implementation "com.googlecode.json-simple:json-simple:$jsonSimpleVersion"

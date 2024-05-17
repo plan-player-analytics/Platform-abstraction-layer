@@ -3,6 +3,14 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { // Sponge Repository
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+    }
+}
+
 dependencies {
     implementation project(':api')
 

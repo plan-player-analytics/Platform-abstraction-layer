@@ -3,6 +3,17 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { // Nukkit Repository
+        url = 'https://repo.opencollab.dev/maven-snapshots'
+    }
+    maven { // Nukkit Required Repository
+        url "https://repo.opencollab.dev/maven-releases"
+    }
+}
+
 dependencies {
     implementation project(':api')
 

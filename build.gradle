@@ -26,32 +26,6 @@ allprojects {
 
     ext.jsonSimpleVersion = '1.1.1'
     ext.guavaVersion = '30.1-jre'
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { // Spigot Repository
-            url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-        }
-        maven { // Paper Repository
-            url = 'https://papermc.io/repo/repository/maven-public/'
-        }
-        maven { // Sponge Repository
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-        maven { // BungeeCord Repository
-            url = 'https://oss.sonatype.org/content/repositories/snapshots'
-        }
-        maven { // Velocity Repository
-            url = 'https://repo.velocitypowered.com/snapshots/'
-        }
-        maven { // Nukkit Repository
-            url = 'https://repo.opencollab.dev/maven-snapshots'
-        }
-        maven { // Nukkit Required Repository
-            url "https://repo.opencollab.dev/maven-releases"
-        }
-    }
 }
 
 dependencies {

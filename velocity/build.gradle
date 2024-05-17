@@ -3,6 +3,14 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { // Velocity Repository
+        url = 'https://repo.velocitypowered.com/snapshots/'
+    }
+}
+
 dependencies {
     implementation project(':api')
 
