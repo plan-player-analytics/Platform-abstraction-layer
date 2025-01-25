@@ -21,7 +21,7 @@ allprojects {
     ext.spongeVersion = '8.0.0-SNAPSHOT'
     ext.nukkitVersion = '1.0-SNAPSHOT'
     ext.bungeecordVersion = '1.16-R0.4'
-    ext.velocityVersion = '1.0.0-SNAPSHOT'
+    ext.velocityVersion = '3.0.0-SNAPSHOT'
     ext.foliaVersion = '1.20.1-R0.1-SNAPSHOT'
 
     ext.jsonSimpleVersion = '1.1.1'
