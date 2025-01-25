@@ -1,4 +1,4 @@
-rootProject.name = 'Platform-abstraction-layer'
+rootProject.name = 'platform-abstraction-layer'
 include 'api'
 include 'bukkit'
 include 'sponge'

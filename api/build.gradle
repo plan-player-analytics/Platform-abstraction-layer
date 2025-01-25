@@ -1,47 +1,10 @@
-plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.1"
-    id 'java-library'
-    id 'maven-publish'
-}
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation "com.googlecode.json-simple:json-simple:$jsonSimpleVersion"
-    implementation "com.google.guava:guava:$guavaVersion"
-    compileOnly "org.slf4j:slf4j-api:1.7.30"
-}
-
-ext.artifactName = 'platform-abstraction-layer-api'
-ext.artifactVersion = project.version
-
-publishing {
-    repositories {
-        maven {
-            name = "plan-repo"
-            url = uri("https://repo.playeranalytics.net/releases")
-            credentials {
-                username = "user"
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
+    api("com.googlecode.json-simple:json-simple:$jsonSimpleVersion") {
+        transitive = false // Includes junit
     }
-    publications {
-        deployment(MavenPublication) {
-            publication ->
-                project.shadow.component(publication)
-                groupId 'net.playeranalytics'
-                artifactId "$artifactName"
-                version "$artifactVersion"
-        }
-    }
-}
-
-shadowJar {
-    archiveClassifier.set('')
-
-    exclude '**/module-info.class'
-    exclude 'module-info.class'
 }

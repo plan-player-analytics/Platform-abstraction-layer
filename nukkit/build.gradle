@@ -1,8 +1,3 @@
-plugins {
-    id 'java'
-    id 'maven-publish'
-}
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -15,31 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':api')
+    api project(":api")
 
     compileOnly "cn.nukkit:nukkit:$nukkitVersion"
-}
-
-ext.artifactName = 'platform-abstraction-layer-nukkit'
-ext.artifactVersion = project.version
-
-publishing {
-    repositories {
-        maven {
-            name = "plan-repo"
-            url = uri("https://repo.playeranalytics.net/releases")
-            credentials {
-                username = "user"
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
-    }
-    publications {
-        deployment(MavenPublication) {
-            from components.java
-            groupId 'net.playeranalytics'
-            artifactId "$artifactName"
-            version "$artifactVersion"
-        }
-    }
 }

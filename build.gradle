@@ -1,42 +1,59 @@
-plugins {
-    id 'java'
-}
-group 'net.playeranalytics'
-version '5.2.0'
-
 allprojects {
-    group 'net.playeranalytics'
-    version '5.2.0'
+    group "net.playeranalytics"
+    version "5.2.0"
+}
 
-    ext.version = project.version
+subprojects {
+    apply(plugin: "java-library")
+    apply(plugin: "maven-publish")
 
-    compileJava { options.encoding = "UTF-8" }
-
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = '11'
-        targetCompatibility = '11'
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 11
+        options.encoding = "UTF-8"
     }
 
-    ext.paperVersion = '1.16.4-R0.1-SNAPSHOT'
-    ext.spongeVersion = '8.0.0-SNAPSHOT'
-    ext.nukkitVersion = '1.0-SNAPSHOT'
-    ext.bungeecordVersion = '1.16-R0.4'
-    ext.velocityVersion = '3.0.0-SNAPSHOT'
-    ext.foliaVersion = '1.20.1-R0.1-SNAPSHOT'
+    ext {
+        paperVersion = '1.16.4-R0.1-SNAPSHOT'
+        spongeVersion = '8.0.0-SNAPSHOT'
+        nukkitVersion = '1.0-SNAPSHOT'
+        bungeecordVersion = '1.16-R0.4'
+        velocityVersion = '3.0.0-SNAPSHOT'
+        foliaVersion = '1.20.1-R0.1-SNAPSHOT'
+        jsonSimpleVersion = '1.1.1'
+    }
 
-    ext.jsonSimpleVersion = '1.1.1'
-    ext.guavaVersion = '30.1-jre'
-}
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-}
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'failed', 'skipped'
+            exceptionFormat 'full'
+        }
+    }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events 'passed', 'failed', 'skipped'
-        exceptionFormat 'full'
+    publishing {
+        repositories {
+            maven {
+                name = "plan-repo"
+                url = uri("https://repo.playeranalytics.net/releases")
+                credentials {
+                    username = "user"
+                    password = System.getenv("REPOSILITE_TOKEN")
+                }
+            }
+        }
+
+        publications {
+            maven(MavenPublication) {
+                from components.java
+                afterEvaluate {
+                    artifactId = rootProject.name + "-" + it.name
+                }
+            }
+        }
     }
 }
