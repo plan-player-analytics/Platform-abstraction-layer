@@ -1,11 +1,13 @@
 package net.playeranalytics.plugin.scheduling;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+
 public class FoliaTask implements Task {
 
-    private final io.papermc.paper.threadedregions.scheduler.ScheduledTask task;
+    private final ScheduledTask task;
     private final boolean isAsync;
 
-    public FoliaTask(io.papermc.paper.threadedregions.scheduler.ScheduledTask task, boolean isAsync) {
+    public FoliaTask(ScheduledTask task, boolean isAsync) {
         this.task = task;
         this.isAsync = isAsync;
     }

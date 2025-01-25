@@ -2,14 +2,14 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven { // Paper Repository
-        url = 'https://repo.papermc.io/repository/maven-public/'
+        url = "https://repo.papermc.io/repository/maven-public/"
     }
 }
 
 dependencies {
     api project(":api")
 
-    compileOnly "io.papermc.paper:paper-api:$foliaVersion"
+    compileOnly "dev.folia:folia-api:$foliaVersion"
 }
 
 tasks.withType(JavaCompile).configureEach {
