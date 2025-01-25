@@ -1,9 +1,7 @@
-allprojects {
+subprojects {
     group "net.playeranalytics"
     version "5.2.0"
-}
 
-subprojects {
     apply(plugin: "java-library")
     apply(plugin: "maven-publish")
 
