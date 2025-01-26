@@ -9,6 +9,7 @@ implementations. This allows users of this API to use other libraries without wo
 ### Supported Minecraft server-platforms
 
 - [Spigot](https://www.spigotmc.org/)
+- [Folia](https://papermc.io/software/folia)
 - [Sponge](https://www.spongepowered.org/)
 - [Nukkit](https://cloudburstmc.org/)
 - [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/)
@@ -29,13 +30,14 @@ repositories {
     }
 }
 
-ext.palVersion = "5.0.0"
+ext.palVersion = "5.3.0"
 
 dependencies {
     implementation "net.playeranalytics:platform-abstraction-layer-api:$palVersion"
     
     // Pick your platform(s)
     implementation "net.playeranalytics:platform-abstraction-layer-bukkit:$palVersion"
+    implementation "net.playeranalytics:platform-abstraction-layer-folia:$palVersion"
     implementation "net.playeranalytics:platform-abstraction-layer-bungeecord:$palVersion"
     implementation "net.playeranalytics:platform-abstraction-layer-nukkit:$palVersion"
     implementation "net.playeranalytics:platform-abstraction-layer-sponge:$palVersion"
@@ -52,7 +54,13 @@ Access the API:
 PlatformAbstractionLayer layer;
 
 // org.bukkit.plugin.java.JavaPlugin
-layer = new BukkitPlatformLayer(javaPlugin); 
+layer =new
+
+BukkitPlatformLayer(javaPlugin);
+// org.bukkit.plugin.java.JavaPlugin
+layer =new
+
+FoliaPlatformLayer(javaPlugin); // Throws IllegalStateException on non-Folia servers
 // Object (has @Plugin annotation), File, org.slf4j.Logger
 layer = new SpongePlatformLayer(plugin, dataFolder, logger); 
 // cn.nukkit.plugin.PluginBase

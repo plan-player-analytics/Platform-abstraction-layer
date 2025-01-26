@@ -2,6 +2,8 @@ cd api
 CALL ../gradlew clean publish
 cd ../bukkit
 CALL ../gradlew clean publish
+cd ../folia
+CALL ../gradlew clean publish
 cd ../bungeecord
 CALL ../gradlew clean publish
 cd ../nukkit
