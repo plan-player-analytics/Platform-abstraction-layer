@@ -10,6 +10,9 @@ dependencies {
     api project(":api")
 
     compileOnly "dev.folia:folia-api:$foliaVersion"
+
+    testImplementation "dev.folia:folia-api:$foliaVersion"
+    testImplementation "org.mockito:mockito-core:5.23.0"
 }
 
 tasks.withType(JavaCompile).configureEach {
