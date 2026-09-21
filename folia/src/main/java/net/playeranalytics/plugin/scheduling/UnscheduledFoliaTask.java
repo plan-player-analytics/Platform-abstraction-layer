@@ -38,14 +38,14 @@ public class UnscheduledFoliaTask extends BukkitRunnable implements UnscheduledT
 
     @Override
     public Task runTaskLaterAsynchronously(long delayTicks) {
-        FoliaTask task = new FoliaTask(asyncScheduler.runDelayed(plugin, (plugin) -> runnable.run(), delayTicks / 20, TimeUnit.MILLISECONDS), true);
+        FoliaTask task = new FoliaTask(asyncScheduler.runDelayed(plugin, (plugin) -> runnable.run(), TimeAmount.ticksToMillis(delayTicks), TimeUnit.MILLISECONDS), true);
         cancellableConsumer.accept(task);
         return task;
     }
 
     @Override
     public Task runTaskTimerAsynchronously(long delayTicks, long periodTicks) {
-        FoliaTask task = new FoliaTask(asyncScheduler.runAtFixedRate(plugin, (plugin) -> runnable.run(), delayTicks / 20, periodTicks / 20, TimeUnit.MILLISECONDS), true);
+        FoliaTask task = new FoliaTask(asyncScheduler.runAtFixedRate(plugin, (plugin) -> runnable.run(), TimeAmount.ticksToMillis(delayTicks), TimeAmount.ticksToMillis(periodTicks), TimeUnit.MILLISECONDS), true);
         cancellableConsumer.accept(task);
         return task;
     }
