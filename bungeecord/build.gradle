@@ -4,6 +4,9 @@ repositories {
     maven { // BungeeCord Repository
         url = 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven { // Paper Repository (for Brigadier snapshot)
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
 }
 
 dependencies {
